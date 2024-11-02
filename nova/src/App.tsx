@@ -1,7 +1,10 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React, { useState } from "react";
 import "./App.css";
+import { callApi } from "./gameFunctions.ts";
+
+enum State {
+  WELCOME,
+}
 
 const strings = {
   whatIsYourName: "What is your name?",
@@ -21,13 +24,8 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
 
-  async function callApi(query: String) {
-    // call api
-    try {
-      return strings.placeholder + " You last typed: " + query;
-    } catch (error) {
-      throw new Error("Error calling API");
-    }
+  function renderOutput(state: String): React.ReactNode {
+    return <></>;
   }
 
   return (
