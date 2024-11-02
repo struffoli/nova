@@ -10,6 +10,13 @@
   margin-top: 0;
 }
 
+.normalText {
+  font-family: "VT323";
+  font-size: 2rem;
+  color: #3f3;
+  text-shadow: #0a0 0 0 6px;
+}
+
 .watermark {
   position: absolute;
   font-size: 1rem;
@@ -17,6 +24,24 @@
   color: #888888;
   bottom: 0;
   left: 1rem;
+}
+
+.errorMessage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 3rem;
+  font-family: "VT323";
+  color: rgb(255, 56, 56);
+  text-shadow: #ff0000 0 0 6px;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 100;
+  white-space: pre-wrap;
 }
 
 .mainContainer {
@@ -33,8 +58,8 @@
 
 .mainContainer::before {
   content: "game.exe";
-  color: #3f3;
-  text-shadow: #0a0 0 0 6px;
+  /* color: #3f3; */
+  /* text-shadow: #0a0 0 0 6px; */
   font-size: 1.5rem;
   font-family: "VT323";
   position: absolute;
@@ -51,6 +76,7 @@
   color: #3f3;
   text-shadow: #0a0 0 0 6px;
   margin-bottom: 80px;
+  width: 100%;
 }
 
 .flex-col {
@@ -59,20 +85,20 @@
   align-items: center;
 }
 
-.input::before {
+/* .input::before {
   content: ">";
   color: #3f3;
-}
+} */
 
 .input {
   width: 40vw;
   height: 2rem;
   border: none;
   background-color: rgba(0, 0, 0, 0);
-  font-family: "VT323";
-  font-size: 2rem;
-  color: #3f3;
-  text-shadow: #0a0 0 0 6px;
+  /* font-family: "VT323"; */
+  /* font-size: 2rem; */
+  /* color: #3f3; */
+  /* text-shadow: #0a0 0 0 6px; */
 }
 
 .input:focus {
@@ -83,11 +109,31 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
+
 .inputContainer::before {
+  /* font-size: 2rem; */
+  /* color: #3f3; */
+  /* text-shadow: #0a0 0 0 6px; */
   content: ">";
-  font-size: 2rem;
-  color: #3f3;
   margin-right: 1rem;
+}
+
+.nameInput::before {
+  content: "[guest@nova] $ setname";
+  margin-right: 0.7rem;
+}
+
+.subContainer {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.outputContainer {
+  text-align: left;
+  line-height: 100%;
+  margin: 0;
+  white-space: pre-wrap;
 }
