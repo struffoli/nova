@@ -71,53 +71,57 @@ function App() {
         );
       case "game":
         return (
-          <div className="subContainer">
-            {history[curIndex].content.map((text: Text, index: number) => {
-              return (
-                <p
-                  key={index}
-                  className={`outputContainer ${
-                    text.centered ? "centered" : ""
-                  } ${text.bold ? "bold" : ""} ${
-                    text.italicized ? "italic" : ""
-                  }
+          <>
+            <h2 className="pageTitle">{history[curIndex].title}</h2>
+            <div className="subContainer">
+              {history[curIndex].content.map((text: Text, index: number) => {
+                return (
+                  <p
+                    key={index}
+                    className={`outputContainer ${
+                      text.centered ? "centered" : ""
+                    } ${text.bold ? "bold" : ""} ${
+                      text.italicized ? "italic" : ""
+                    }
                   ${text.color}`}
-                >
-                  {text.content}
-                </p>
-              );
-            })}
-            <form
-              onSubmit={(e) => {
-                // new output
-                setIsLoading(true);
-                getPage(input)
-                  .then((newPage) => {
-                    setHistory([...history, newPage]);
-                  })
-                  .catch((err) => {
-                    setIsError(true);
-                    setError(err.message);
-                  })
-                  .finally(() => {
-                    setIsLoading(false);
-                    setInput("");
-                  });
-                e.preventDefault();
-              }}
-            >
-              {!isLoading && (
-                <div className="inputContainer">
-                  <input
-                    type="text"
-                    className="input normalText"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                  ></input>
-                </div>
-              )}
-            </form>
-          </div>
+                  >
+                    {text.content}
+                  </p>
+                );
+              })}
+              <form
+                onSubmit={(e) => {
+                  // new output
+                  setIsLoading(true);
+                  getPage(input)
+                    .then((newPage) => {
+                      setHistory([...history, newPage]);
+                      setCurIndex(history.length);
+                    })
+                    .catch((err) => {
+                      setIsError(true);
+                      setError(err.message);
+                    })
+                    .finally(() => {
+                      setIsLoading(false);
+                      setInput("");
+                    });
+                  e.preventDefault();
+                }}
+              >
+                {!isLoading && (
+                  <div className="inputContainer">
+                    <input
+                      type="text"
+                      className="input normalText"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                    ></input>
+                  </div>
+                )}
+              </form>
+            </div>
+          </>
         );
       case "history":
       case "quiz":
