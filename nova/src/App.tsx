@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
-import { callApi } from "./gameFunctions.ts";
+import { getPage } from "./gameFunctions.ts";
+import { Page, Text } from "./types.ts";
 
 enum State {
   WELCOME,
+  NOVA,
+  HISTORY,
+  QUIZ,
 }
 
 const strings = {
@@ -19,13 +23,17 @@ const strings = {
 function App() {
   const [name, setName] = useState("");
   const [input, setInput] = useState("");
-  const [output, setOutput] = useState(strings.placeholder);
+  const [curIndex, setCurIndex] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
+  const [history, setHistory] = useState<Page[]>([]);
 
-  function renderOutput(state: String): React.ReactNode {
-    return <></>;
+  function renderOutput(state: State): React.ReactNode {
+    switch (state) {
+      default:
+        return <></>;
+    }
   }
 
   return (
@@ -61,16 +69,28 @@ function App() {
           </form>
         ) : (
           <div className="subContainer">
-            <p className="outputContainer">{output}</p>
+            {history[curIndex].content.map((text: Text, index: number) => {
+              return (
+                <p
+                  key={index}
+                  className={`outputContainer ${
+                    text.centered ? "centered" : ""
+                  } ${text.bold ? "bold" : ""} ${
+                    text.italicized ? "italic" : ""
+                  }
+                  ${text.color}`}
+                >
+                  {text.content}
+                </p>
+              );
+            })}
             <form
               onSubmit={(e) => {
                 // new output
                 setIsLoading(true);
-                setOutput("");
-                setInput("");
-                callApi(input)
-                  .then((newOutput) => {
-                    setOutput(newOutput);
+                getPage(input)
+                  .then((newPage) => {
+                    setHistory([...history, newPage]);
                   })
                   .catch((err) => {
                     setIsError(true);
@@ -78,6 +98,7 @@ function App() {
                   })
                   .finally(() => {
                     setIsLoading(false);
+                    setInput("");
                   });
                 e.preventDefault();
               }}
