@@ -10,4 +10,5 @@ todo:
 - hp indicator
 - separate menu for history
 - images
+- always focus input
 - et cetera

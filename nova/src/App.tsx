@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import { getPage } from "./gameFunctions";
 import { Page, Text } from "./types";
+// icon by halfmage https://www.svgrepo.com/svg/377250/clock
+import clock from "./assets/clock-svgrepo-com.svg";
 
 type State = "welcome" | "game" | "history" | "quiz";
 
@@ -10,6 +12,8 @@ const strings = {
   watermark: "(c) kevinware 1999",
   hello: "Hello",
   welcome: "Welcome",
+  history: "History",
+  returnToPage: "Return to current page",
   error:
     "We're sorry, an error has occurred. Please refresh the page.\nError message: ",
   placeholder:
@@ -73,6 +77,12 @@ function App() {
         return (
           <>
             <h2 className="pageTitle">{history[curIndex].title}</h2>
+            <button
+              className="historyButton"
+              onClick={() => setState("history")}
+            >
+              <img className="historyIcon" src={clock}></img>
+            </button>
             <div className="subContainer">
               {history[curIndex].content.map((text: Text, index: number) => {
                 return (
@@ -109,7 +119,7 @@ function App() {
                   e.preventDefault();
                 }}
               >
-                {!isLoading && (
+                {!isLoading && curIndex == history.length - 1 && (
                   <div className="inputContainer">
                     <input
                       type="text"
@@ -124,6 +134,41 @@ function App() {
           </>
         );
       case "history":
+        return (
+          <>
+            <h2 className="pageTitle">{strings.history}</h2>
+            <div className="subContainer">
+              <ol className="historyList">
+                <li key={0} className="historyItem">
+                  <button
+                    onClick={() => {
+                      setCurIndex(history.length - 1);
+                      setState("game");
+                    }}
+                    className="historyItemButton normalText"
+                  >
+                    {strings.returnToPage}
+                  </button>
+                </li>
+                {history.map((page: Page, index: number) => {
+                  return (
+                    <li key={index + 1} className="historyItem">
+                      <button
+                        onClick={() => {
+                          setCurIndex(index);
+                          setState("game");
+                        }}
+                        className="historyItemButton normalText"
+                      >
+                        {page.title}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          </>
+        );
       case "quiz":
     }
   }

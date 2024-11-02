@@ -9,6 +9,10 @@
   margin-top: 0;
 }
 
+#root button:focus {
+  outline-color: #3f3;
+}
+
 .normalText {
   font-family: "VT323";
   font-size: 2rem;
@@ -75,6 +79,62 @@
   margin-bottom: 80px;
   width: 100%;
   user-select: none;
+}
+
+.historyButton {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  transform: translateY(-55%);
+  height: 1.5rem;
+  width: 1.5rem;
+  background-color: #242424;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  /* color: #3f3; */
+  /* fill: #3f3; */
+  /* filter: drop-shadow(0px 4px 20px rgba(255, 255, 255, 0.3)); */
+}
+
+.historyButton:hover {
+  border-color: transparent;
+}
+
+.historyIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.historyList {
+  margin-left: 2rem;
+}
+
+.historyItem {
+  text-align: left;
+  line-height: 100%;
+  /* position: relative; */
+}
+
+
+.historyItemButton {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  position: relative;
+}
+
+.historyItemButton:hover::before {
+  content: ">"; 
+  position: absolute;
+  left: -4rem; 
+  color: #3f3;
+}
+
+.historyItemButton:hover {
+  border-color: transparent;
 }
 
 .flex-col {
