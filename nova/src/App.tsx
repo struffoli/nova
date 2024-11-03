@@ -47,12 +47,11 @@ function App() {
   const [state, setState] = useState<State>("welcome");
   const [chat, setChat] = useState<Chat>({ messages: [] });
   const [health, setHealth] = useState(10);
-  const [items, setItems] = useState<Item[]>(placeholderItems);
-  const [currentGoal, setCurrentGoal] = useState<string>(strings.placeholder2);
-  const [currentLocation, setCurrentLocation] = useState<string>(
-    strings.placeholder3
-  );
+  const [items, setItems] = useState<Item[]>([]);
+  const [currentGoal, setCurrentGoal] = useState<string>();
+  const [currentLocation, setCurrentLocation] = useState<string>();
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   function handleSubmit(
     e:
@@ -63,12 +62,69 @@ function App() {
     setIsLoading(true);
     getPage(history.length + 1, chat, state === "welcome" ? name : input)
       .then((response) => {
+        // update history with new page
         setHistory([...history, response[0]]);
+        // save chat state (used by stateless backend)
         setChat(response[1]);
         setCurIndex(history.length);
         if (state === "welcome") {
           setState("game");
         }
+
+        // process system_calls
+        // "set_health"
+        // "add_item"
+        // "remove_item"
+        // "set_goal"
+        // "set_location"
+        // "start_battle"
+        // "end_battle"
+        // "game_end"
+        for (let i = 0; i < response[2].system_calls.length; i++) {
+          const system_call = response[2].system_calls[i];
+          switch (system_call.type) {
+            case "set_health":
+              setHealth(system_call.int_param);
+              break;
+            case "add_item":
+              // if already exists, add another. only adds 1 at a time so careful not to mismatch what the language model thinks is happening.
+              let found = false;
+              setItems(
+                items.map((item) => {
+                  if (item.name === system_call.string_param) {
+                    found = true;
+                    return { name: item.name, quantity: item.quantity + 1 };
+                  }
+                  return item;
+                })
+              );
+              if (!found) {
+                setItems([
+                  ...items,
+                  { name: system_call.string_param, quantity: 1 },
+                ]);
+              }
+              break;
+            case "remove_item": // removes all regardless of int_param or current quantity
+              setItems(items.filter((item) => item.name !== system_call.string_param));
+              break;
+            case "set_goal":
+              setCurrentGoal(system_call.string_param);
+              break;
+            case "set_location":
+              setCurrentLocation(system_call.string_param);
+              break;
+            case "start_battle": // don't really currently use these
+              break;
+            case "end_battle":
+              break;
+            case "game_end":
+              // uncomment to disable input on game_end.
+              // setIsGameOver(true); 
+              break;
+          }
+        }
+
       })
       .catch((err) => {
         setIsError(true);
@@ -128,7 +184,7 @@ function App() {
                   <p
                     key={index}
                     className={`outputContainer ${
-                      text.color === "#ddd" ? "secondaryText" : ""
+                      text.color === "#ddd" ? "tertiaryText" : text.color === "#fd3" ? "secondaryText" : ""
                     }`}
                     // make bold if text.bold
                     style={{
@@ -144,20 +200,22 @@ function App() {
               })}
               {!isLoading && curIndex == history.length - 1 && (
                 <>
-                  <p className="outputContainer secondaryText">
+                  <p className="outputContainer tertiaryText">
                     {strings.goal} {currentGoal}
                   </p>
-                  <p className="outputContainer secondaryText">
+                  <p className="outputContainer tertiaryText">
                     {strings.location} {currentLocation}
                   </p>
-                  <form>
-                    <Input
+                    {!isGameOver && (
+                    <form>
+                      <Input
                       value={input}
                       setValue={setInput}
                       isWelcome={false}
                       handleSubmit={(e) => handleSubmit(e)}
-                    />
-                  </form>
+                      />
+                    </form>
+                    )}
                 </>
               )}
             </div>

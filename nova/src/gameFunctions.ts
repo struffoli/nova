@@ -4,7 +4,7 @@ export async function getPage(
   id: number,
   chat: Chat,
   query: String
-): Promise<[Page, Chat]> {
+): Promise<[Page, Chat, Response]> {
   // first page, use id start_game with query as name
   if (id === 1) {
     // post request to localhost:5432/start_game(player_name)
@@ -32,7 +32,7 @@ export async function getPage(
     for (let i = 0; i < response.text.length; i++) {
       const text = response.text[i];
       page_text.push({
-        color: text.type === "dialogue" ? "#ddd" : "#3f3",
+        color: text.type === "dialogue" ? "#ddd" : text.type === "text2" ? "#fd3" : "#3f3",
         centered: false,
         bold: false,
         italicized: false,
@@ -40,15 +40,13 @@ export async function getPage(
       });
     }
 
-    // process system_calls
-
     const newChat: Chat = data;
     const page: Page = {
       id: id,
       title: "Game Start!",
       content: page_text,
     };
-    return [page, newChat];
+    return [page, newChat, response];
   } else {
     // post request to localhost:5432/make_move
     //  takes user_move parameter, and Chat as request body
@@ -75,10 +73,10 @@ export async function getPage(
     for (let i = 0; i < response.text.length; i++) {
       const text = response.text[i];
       page_text.push({
-        color: text.type === "dialogue" ? "#ddd" : "#3f3",
+        color: text.type === "dialogue" ? "#ddd" : text.type === "text2" ? "#fd3" : "#3f3",
         centered: false,
         bold: false,
-        italicized: false,
+        italicized: text.type === "text2",
         content: text.content,
       });
     }
@@ -90,7 +88,7 @@ export async function getPage(
       title: title.toString(),
       content: page_text,
     };
-    return [page, newChat];
+    return [page, newChat, response];
   }
 
   try {

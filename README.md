@@ -11,7 +11,7 @@ todo:
 - special encounters
 - images
 - always focus input
-- more character customization
+- more character customization (user bio to determine topics and difficulty based on experience)
 - et cetera
 
 # major todos

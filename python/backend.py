@@ -138,33 +138,32 @@ def start_game(player_name: str) -> Chat:
     # Enemy encounters should be every 5 moves or so. Do not let the player make impossible moves. Write creatively while being easy to understand, and keep most responses short.
     # At the bottom of each response, include a brief sentence summary of the player's status, such as health, location, current goal, etc., and then follow with a question to prompt the player's next move."""
     prompt = f"""We are playing an text-based RPG game, similar to a retro arcade game like Oregon Trail. You are the gamemaster running it.
-    This is an educational game designed to help players learn computer science concepts in a fun and engaging way.
+    This is an educational game designed to help players learn and review computer science concepts in a fun and engaging way.
     Come up with a world where the player must use their computer science knowledge and programming skills. e.g. an engineer in the year 3000 saving humanity by defeating bugs and rogue AI, but be creative and don't follow traditional sci-fi tropes.
     Welcome the player and create the initial scene (background info and whatever interactions might happens immediately).
     The player should have to figure out their goal themselves based on their exploration of your world.
     Refer to the player as their name "{player_name}" or \"you\", and build the game based on their actions.
     Do not make moves for the player or even suggest actions, but guide them through a storyline implicitly with your writing.
-    The purpose of the game is to assist with studying computer science concepts.
     Enemy encounters should be battles where the player is asked a computer science question and must answer as if they are speaking to the enemy.
     Incorrect answers lose health and they get more challenging as the story progresses.
     Balance between free-play and enemy encounters, but aim to finish the game pretty quickly as a short story with either a win or loss while still having enough battles.
     Rare special events can occur to keep it interesting, such as helpful NPCs or enemies that don't act traditionally.
     Disallow impossible moves outside of the player's capability (e.g. using items they don't have).
-    Write creatively while being easy to understand, and keep responses short.
+    Write creatively while being easy to understand, and keep responses short. Your intent should balance between humour and exciting drama.
     The game ends at zero health. Players start with 10 health and no items. Reaching a conclusion in the storyline without dying will end the game.
     End each response with a question to prompt the player's next move.
     Use these text blocks to format your response: {{
     text for normal story and description text,
     text2 for text describing things like losing health, gaining items, entering battle, and environmental events like the building collapsing,
     dialogue for speech in quotes from NPCs, player, etc.,
-    action_prompt for the last msg prompting to make a move}}. You can use a mix, such as going back and forth between text and dialogue.
+    action_prompt for the question prompting player to make a move}}. You can use a mix, such as going back and forth between text and dialogue. Always end with an action_prompt.
     Add these system call blocks if applicable to your response: {{
     set_health function for setting player health (integer param only),
     add_item and remove_item functions for adding or removing items from the player's inventory 1 at a time (string param for item name, integer param for amount),
     set_goal function for what player currently seems to be trying to do (string param),
     set_location function for current location (string param),
-    start_battle and end_battle to signal entering and ending battle mode (string param message),
-    game_end to signal the last message and end the game (string param message)}}. Only include syscalls that the latest turn caused."""
+    start_battle and end_battle to signal entering and ending battle mode (no params),
+    game_end to signal the last message and end the game (string param message)}}. Only include syscalls that the latest turn caused. On the first turn, you can set the player's health, location, and goal."""
 
     # get rid of newlines and extra spaces like tabs
     prompt = prompt.replace("\n", " ")
@@ -177,7 +176,7 @@ def start_game(player_name: str) -> Chat:
     #     messages=messages
     # )
     completion = client.beta.chat.completions.parse(
-        model="gpt-4o",
+        model="gpt-4o", # don't recommend using mini here if using structured output format
         messages=messages,
         response_format=Response
     )
@@ -206,6 +205,8 @@ def make_move(chat: Chat, user_move: str) -> Chat:
     messages.append({"role": "user", "content": user_move})
 
     completion = client.beta.chat.completions.parse(
+        # the starter prompt uses gpt-4o because it follows instructions better. mini would break the response format often. subsequent moves seem to be able to use gpt-4o-mini fine because 4o set a correct example
+        # we can probably just use 4o here anyways, not too expensive
         model="gpt-4o-mini",
         messages=messages,
         response_format=Response
