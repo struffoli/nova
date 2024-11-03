@@ -54,7 +54,7 @@ function App() {
   ) {
     // new output
     setIsLoading(true);
-    getPage(history.length + 1, chat, input)
+    getPage(history.length + 1, chat, state === "welcome" ? name : input)
       .then((response) => {
         setHistory([...history, response[0]]);
         setChat(response[1]);
