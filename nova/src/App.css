@@ -18,6 +18,18 @@
   overflow-wrap: break-word;
 }
 
+*::-webkit-scrollbar {
+  width: 0.25rem;
+}
+ 
+*::-webkit-scrollbar-thumb {
+  background-color: #3f3;
+}
+
+*::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
 .normalText {
   font-family: "VT323";
   font-size: 2rem;
@@ -116,25 +128,13 @@
 }
 
 .inventoryList {
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: start;
   width: 90%;
   margin: 0;
   padding: 0;
-}
-
-.inventoryList::-webkit-scrollbar {
-  width: 0.25rem;
-}
- 
-.inventoryList::-webkit-scrollbar-thumb {
-  background-color: #3f3;
-}
-
-.inventoryList::-webkit-scrollbar-corner {
-  background-color: transparent;
 }
 
 .inventoryItem {
@@ -277,14 +277,6 @@
   padding-right: 1rem;
   /* -ms-overflow-style: none;
   scrollbar-width: none; */
-}
-
-.subContainer::-webkit-scrollbar {
-  width: 0.25rem;
-}
- 
-.subContainer::-webkit-scrollbar-thumb {
-  background-color: #3f3;
 }
 
 .outputContainer {

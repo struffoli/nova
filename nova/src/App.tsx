@@ -154,12 +154,14 @@ function App() {
                 ></img>
               ))}
             </div>
-            <button
-              onClick={() => setIsInventoryOpen(true)}
-              className="inventoryButton normalText"
-            >
-              {strings.items}
-            </button>
+            {curIndex == history.length - 1 && (
+              <button
+                onClick={() => setIsInventoryOpen(true)}
+                className="inventoryButton normalText"
+              >
+                {strings.items}
+              </button>
+            )}
           </>
         );
       case "history":
@@ -167,8 +169,8 @@ function App() {
           <>
             <h2 className="pageTitle">{strings.history}</h2>
             <div className="subContainer">
-              <ol className="historyList">
-                <li key={0} className="historyItem">
+              <ol className="historyList" start={0}>
+                <li key={-1} className="historyItem">
                   <button
                     onClick={() => {
                       setCurIndex(history.length - 1);
@@ -181,7 +183,7 @@ function App() {
                 </li>
                 {history.slice(0, -1).map((page: Page, index: number) => {
                   return (
-                    <li key={index + 1} className="historyItem">
+                    <li key={index} className="historyItem">
                       <button
                         onClick={() => {
                           setCurIndex(index);
