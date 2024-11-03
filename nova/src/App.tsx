@@ -125,9 +125,11 @@ function App() {
             <div className="subContainer">
               {history[curIndex].content.map((text: Text, index: number) => {
                 return (
-                    <p
+                  <p
                     key={index}
-                    className={`outputContainer`}
+                    className={`outputContainer ${
+                      text.color === "#ddd" ? "secondaryText" : ""
+                    }`}
                     // make bold if text.bold
                     style={{
                       color: text.color,
@@ -135,9 +137,9 @@ function App() {
                       fontWeight: text.bold ? "bold" : "normal",
                       fontStyle: text.italicized ? "italic" : "normal",
                     }}
-                    >
+                  >
                     {text.content}
-                    </p>
+                  </p>
                 );
               })}
               {!isLoading && curIndex == history.length - 1 && (
