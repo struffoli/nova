@@ -61,53 +61,57 @@ class Chat(BaseModel):
 # - game mode change (returning to normal mode, entering battle mode, etc)
 # - complete game (tell system to stop prompting)
 
-# class BlockType(str, Enum):
-#     text = "text"
-#     text2 = "text2"
-#     special = "special"
-#     dialogue = "dialogue"
-#     action_prompt = "action_prompt"
-#     set_health = "set_health"
-#     set_item_quantity = "set_item_quantity"
-#     set_goal = "set_goal"
-#     set_location = "set_location"
-#     start_battle = "start_battle"
-#     end_battle = "end_battle"
-#     game_end = "game_end"
+class TextType(str, Enum):
+    text = "text"
+    text2 = "text2"
+    dialogue = "dialogue"
+    action_prompt = "action_prompt"
 
-class Text(BaseModel):
-    text: str
-class Text2(BaseModel):
-    text2: str
-class Special(BaseModel):
-    special: str
-class Dialogue(BaseModel):
-    dialogue: str
-class ActionPrompt(BaseModel):
-    action_prompt: str
-class SetHealth(BaseModel):
-    set_health: int
-class SetItemQuantity(BaseModel):
-    set_item: str
-    set_quantity: int
-class SetGoal(BaseModel):
-    set_goal: str
-class SetLocation(BaseModel):
-    location: str
-class StartBattle(BaseModel):
-    start_battle: str
-class EndBattle(BaseModel):
-    end_battle: str
-class GameEnd(BaseModel):
-    game_end: str
+class SysCallType(str, Enum):
+    set_health = "set_health"
+    add_item = "add_item"
+    remove_item = "remove_item"
+    set_goal = "set_goal"
+    set_location = "set_location"
+    start_battle = "start_battle"
+    end_battle = "end_battle"
+    game_end = "game_end"
 
-# class Block(BaseModel):
-#     type: BlockType
-#     value: str
+# class Text(BaseModel):
+#     text: str
+# class Text2(BaseModel):
+#     text2: str
+# class Dialogue(BaseModel):
+#     dialogue: str
+# class ActionPrompt(BaseModel):
+#     action_prompt: str
+# class SetHealth(BaseModel):
+#     set_health: int
+# class AddItem(BaseModel):
+#     item_to_add: str
+#     amt_to_add: int
+# class SetGoal(BaseModel):
+#     set_goal: str
+# class SetLocation(BaseModel):
+#     location: str
+# class StartBattle(BaseModel):
+#     start_battle: str
+# class EndBattle(BaseModel):
+#     end_battle: str
+# class GameEnd(BaseModel):
+#     game_end: str
+
+class TextBlock(BaseModel):
+    type: TextType
+    content: str
+
+class SysCallBlock(BaseModel):
+    type: SysCallType
+    content: str
 
 class Response(BaseModel):
     # use equivalent of json schema anyOf to allow multiple types
-    blocks: list[Union[Text, Text2, Dialogue, ActionPrompt, SetHealth, SetItemQuantity, SetGoal, SetLocation, StartBattle, EndBattle, GameEnd]]
+    blocks: list[Union[TextBlock, SysCallBlock]]
 
 # api endpoint for first message in the game
 # parameters: player name from landing page and possibly other settings
@@ -131,7 +135,7 @@ def start_game(player_name: str) -> Chat:
     # The player loses the game if their health points reach zero. The player can also lose the game by making a series of poor decisions that lead to a game over scenario.
     # Enemy encounters should be every 5 moves or so. Do not let the player make impossible moves. Write creatively while being easy to understand, and keep most responses short.
     # At the bottom of each response, include a brief sentence summary of the player's status, such as health, location, current goal, etc., and then follow with a question to prompt the player's next move."""
-    prompt = f"""We are playing an interactive text-based RPG game, similar to a retro arcade game like Oregon Trail. You are the gamemaster overseeing it.
+    prompt = f"""We are playing an text-based RPG game, similar to a retro arcade game like Oregon Trail. You are the gamemaster overseeing it.
     This is an educational game designed to help players learn computer science concepts in a fun and engaging way.
     Come up with a world where the player must use their computer science knowledge and programming skills. One example could be an engineer in the year 3000 saving humanity by defeating bugs and rogue AI. Be creative and don't follow traditional sci-fi tropes.
     Welcome the player and create the initial scene (background info and whatever interactions might happens immediately).
@@ -145,20 +149,20 @@ def start_game(player_name: str) -> Chat:
     Rare special events can occur to keep it interesting, such as helpful NPCs or enemies that don't act traditionally.
     Disallow impossible moves outside of the player's capability (e.g. using items they don't have).
     Write creatively while being easy to understand, and keep responses short.
-    The game ends at zero health, and players start with 10 hearts of health. Reaching a conclusion in the storyline without dying will end the game.
+    The game ends at zero health. Players start with 10 health and no items. Reaching a conclusion in the storyline without dying will end the game.
     End each response with a question to prompt the player's next move.
-    Construct your response using these blocks for each part:
-    Text for normal story and description text.
-    Text2 for text describing things like losing health, gaining items, entering battle, and environmental events like the building collapsing.
-    Dialogue for speech in quotes from NPCs, player, etc.
-    ActionPrompt for the last msg prompting to make a move.
-    SetHealth for setting player health (an integer).
-    SetItemQuantity for item updates (item name and quantity separated by a comma).
-    SetGoal for what player currently seems to be trying to do,
-    SetLocation for current location,
-    StartBattle and EndBattle signals entering and ending battle mode,
-    GameEnd to signal the last message and end the game.
-    After this intro, set the initial health and location."""
+    Use these text blocks to format your response: {{
+    text for normal story and description text,
+    text2 for text describing things like losing health, gaining items, entering battle, and environmental events like the building collapsing,
+    dialogue for speech in quotes from NPCs, player, etc.,
+    action_prompt for the last msg prompting to make a move}}. You can use a mix, such as going back and forth between text and dialogue.
+    Add these system call blocks if applicable to your response: {{
+    set_health function for setting player health (an integer),
+    add_item and remove_item functions for adding or removing items from the player's inventory 1 at a time,
+    set_goal function for what player currently seems to be trying to do,
+    set_location function for current location,
+    start_battle and end_battle to signal entering and ending battle mode,
+    game_end to signal the last message and end the game}}."""
 
     # get rid of newlines and extra spaces like tabs
     prompt = prompt.replace("\n", " ")

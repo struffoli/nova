@@ -17,7 +17,7 @@ export async function getPage(id: number, chat: Chat, query: String): Promise<[P
     const newChat: Chat = data;
     const page: Page = {
       id: id,
-      title: "Start Game!",
+      title: "Game Start!",
       content: [
         {
           color: "green",
