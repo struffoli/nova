@@ -118,17 +118,19 @@ function App() {
             <div className="subContainer">
               {history[curIndex].content.map((text: Text, index: number) => {
                 return (
-                  <p
+                    <p
                     key={index}
-                    className={`outputContainer ${
-                      text.centered ? "centered" : ""
-                    } ${text.bold ? "bold" : ""} ${
-                      text.italicized ? "italic" : ""
-                    }
-                  ${text.color}`}
-                  >
+                    className={`outputContainer`}
+                    // make bold if text.bold
+                    style={{
+                      color: text.color,
+                      textAlign: text.centered ? "center" : "left",
+                      fontWeight: text.bold ? "bold" : "normal",
+                      fontStyle: text.italicized ? "italic" : "normal",
+                    }}
+                    >
                     {text.content}
-                  </p>
+                    </p>
                 );
               })}
               <form>

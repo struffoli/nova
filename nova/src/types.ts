@@ -22,3 +22,15 @@ export type Item = {
   name: string;
   quantity: number;
 };
+
+export type Response = {
+  text: [{
+    type: string;
+    content: string;
+  }],
+  system_calls: [{
+    type: string;
+    string_param: string;
+    int_param: number;
+  }]
+}

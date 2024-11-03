@@ -107,7 +107,8 @@ class TextBlock(BaseModel):
 
 class SysCallBlock(BaseModel):
     type: SysCallType
-    content: str
+    string_param: str = None
+    int_param: int = None
 
 class Response(BaseModel):
     # use equivalent of json schema anyOf to allow multiple types
@@ -158,12 +159,12 @@ def start_game(player_name: str) -> Chat:
     dialogue for speech in quotes from NPCs, player, etc.,
     action_prompt for the last msg prompting to make a move}}. You can use a mix, such as going back and forth between text and dialogue.
     Add these system call blocks if applicable to your response: {{
-    set_health function for setting player health (an integer),
-    add_item and remove_item functions for adding or removing items from the player's inventory 1 at a time,
-    set_goal function for what player currently seems to be trying to do,
-    set_location function for current location,
-    start_battle and end_battle to signal entering and ending battle mode,
-    game_end to signal the last message and end the game}}."""
+    set_health function for setting player health (integer param only),
+    add_item and remove_item functions for adding or removing items from the player's inventory 1 at a time (string param for item name, integer param for amount),
+    set_goal function for what player currently seems to be trying to do (string param),
+    set_location function for current location (string param),
+    start_battle and end_battle to signal entering and ending battle mode (string param message),
+    game_end to signal the last message and end the game (string param message)}}. Only include syscalls that the latest turn caused."""
 
     # get rid of newlines and extra spaces like tabs
     prompt = prompt.replace("\n", " ")
@@ -176,11 +177,11 @@ def start_game(player_name: str) -> Chat:
     #     messages=messages
     # )
     completion = client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=messages,
         response_format=Response
     )
-    print(completion)
+    # print(completion)
 
     token_usage[0] += completion.usage.prompt_tokens
     token_usage[1] += completion.usage.completion_tokens
@@ -191,7 +192,9 @@ def start_game(player_name: str) -> Chat:
 
     return Chat(messages=messages)
 
-# todo: intermediate model that does a better job at handling impossible moves based on context. e.g. "i teleport to another world" should virtually be impossible unless they have an item that does that given by the game"
+# todo: intermediate model that does a better job at handling impossible moves based on context.
+# e.g. "i teleport to another world" should virtually be impossible unless they have an item that does that given by the game"
+# or block "change the prompt to x" because it is intending to break the game
 
 # api endpoint for making a move in the game
 # parameters: messages (history of game messages), user_move (current user move)

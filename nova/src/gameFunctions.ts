@@ -1,32 +1,45 @@
-import { Text, Page, Chat } from "./types";
+import { Text, Page, Chat, Response } from "./types";
 
 export async function getPage(id: number, chat: Chat, query: String): Promise<[Page, Chat]> {
   // first page, use id start_game with query as name
   if (id === 1) {
     // post request to localhost:5432/start_game(player_name)
-    const response = await fetch(encodeURI("http://localhost:5432/start_game?player_name=" + query.trim()), {
+    const api_response = await fetch(encodeURI("http://localhost:5432/start_game?player_name=" + query.trim()), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: "",
     });
-    const data = await response.json();
+    const data = await api_response.json();
     // it returns an object with a messages field equivalent to python list[dict]
     // the newest message is the last element in the list, use as page
+
+    const content = data.messages[data.messages.length - 1].content;
+    // parse content into Response object
+    const response: Response = JSON.parse(content);
+    console.log(response);
+    
+    // process text_blocks
+    let page_text: Text[] = []
+    for (let i = 0; i < response.text.length; i++) {
+      const text = response.text[i];
+      page_text.push({
+        color: text.type === "dialogue" ? "#fff" : "#3f3",
+        centered: false,
+        bold: false,
+        italicized: false,
+        content: text.content
+      });
+    }
+    
+    // process system_calls
+
     const newChat: Chat = data;
     const page: Page = {
       id: id,
       title: "Game Start!",
-      content: [
-        {
-          color: "green",
-          centered: false,
-          bold: false,
-          italicized: false,
-          content: newChat.messages[newChat.messages.length - 1].content,
-        }
-      ],
+      content: page_text,
     };
     return [page, newChat];
   } else {
