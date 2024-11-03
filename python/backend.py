@@ -111,7 +111,8 @@ class SysCallBlock(BaseModel):
 
 class Response(BaseModel):
     # use equivalent of json schema anyOf to allow multiple types
-    blocks: list[Union[TextBlock, SysCallBlock]]
+    text: list[TextBlock]
+    system_calls: list[SysCallBlock]
 
 # api endpoint for first message in the game
 # parameters: player name from landing page and possibly other settings
@@ -135,9 +136,9 @@ def start_game(player_name: str) -> Chat:
     # The player loses the game if their health points reach zero. The player can also lose the game by making a series of poor decisions that lead to a game over scenario.
     # Enemy encounters should be every 5 moves or so. Do not let the player make impossible moves. Write creatively while being easy to understand, and keep most responses short.
     # At the bottom of each response, include a brief sentence summary of the player's status, such as health, location, current goal, etc., and then follow with a question to prompt the player's next move."""
-    prompt = f"""We are playing an text-based RPG game, similar to a retro arcade game like Oregon Trail. You are the gamemaster overseeing it.
+    prompt = f"""We are playing an text-based RPG game, similar to a retro arcade game like Oregon Trail. You are the gamemaster running it.
     This is an educational game designed to help players learn computer science concepts in a fun and engaging way.
-    Come up with a world where the player must use their computer science knowledge and programming skills. One example could be an engineer in the year 3000 saving humanity by defeating bugs and rogue AI. Be creative and don't follow traditional sci-fi tropes.
+    Come up with a world where the player must use their computer science knowledge and programming skills. e.g. an engineer in the year 3000 saving humanity by defeating bugs and rogue AI, but be creative and don't follow traditional sci-fi tropes.
     Welcome the player and create the initial scene (background info and whatever interactions might happens immediately).
     The player should have to figure out their goal themselves based on their exploration of your world.
     Refer to the player as their name "{player_name}" or \"you\", and build the game based on their actions.
@@ -179,6 +180,8 @@ def start_game(player_name: str) -> Chat:
         messages=messages,
         response_format=Response
     )
+    print(completion)
+
     token_usage[0] += completion.usage.prompt_tokens
     token_usage[1] += completion.usage.completion_tokens
     logging.info(f"\t\tUsed: {completion.usage.prompt_tokens + completion.usage.completion_tokens}")
