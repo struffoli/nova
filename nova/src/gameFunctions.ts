@@ -45,30 +45,40 @@ export async function getPage(id: number, chat: Chat, query: String): Promise<[P
   } else {
     // post request to localhost:5432/make_move
     //  takes user_move parameter, and Chat as request body
-    const response = await fetch(encodeURI("http://localhost:5432/make_move?user_move=" + query.trim()), {
+    const api_response = await fetch(encodeURI("http://localhost:5432/make_move?user_move=" + query.trim()), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(chat),
     });
-    const data = await response.json();
+    const data = await api_response.json();
     const newChat: Chat = data;
+
+    const content = data.messages[data.messages.length - 1].content;
+    // parse content into Response object
+    const response: Response = JSON.parse(content);
+    console.log(response);
+    
+    // process text_blocks
+    let page_text: Text[] = []
+    for (let i = 0; i < response.text.length; i++) {
+      const text = response.text[i];
+      page_text.push({
+        color: text.type === "dialogue" ? "#fff" : "#3f3",
+        centered: false,
+        bold: false,
+        italicized: false,
+        content: text.content
+      });
+    }
 
     // set title of new page is the user's move with "..." at the end if too long
     const title = query.length > 32 ? query.substring(0, 32) + "..." : query;
     const page: Page = {
       id: id,
       title: title.toString(),
-      content: [
-        {
-          color: "green",
-          centered: false,
-          bold: false,
-          italicized: false,
-          content: newChat.messages[newChat.messages.length - 1].content,
-        }
-      ],
+      content: page_text,
     };
     return [page, newChat];
   }
