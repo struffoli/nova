@@ -90,19 +90,15 @@ function App() {
         return (
           <>
             <h2 className="pageTitle">{strings.welcome}</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit(e);
-              }}
-            >
+            {/* todo: semantically incorrect.. fix later */}
+            <form>
               <label className="title flex-col">
                 {strings.whatIsYourName}
                 <Input
                   value={name}
                   setValue={setName}
                   isWelcome={true}
-                  handleSubmit={handleWelcome}
+                  handleSubmit={handleSubmit}
                 />
               </label>
             </form>
@@ -141,11 +137,7 @@ function App() {
                   </p>
                 );
               })}
-              <form
-                onSubmit={(e) => {
-                  handleSubmit(e);
-                }}
-              >
+              <form>
                 {!isLoading && curIndex == history.length - 1 && (
                   <Input
                     value={input}
