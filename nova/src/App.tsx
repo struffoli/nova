@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { getPage } from "./gameFunctions";
-import { Chat, Page, Text } from "./types";
+import { Chat, Page, Text, Item } from "./types";
 // icon by halfmage https://www.svgrepo.com/svg/377250/clock
 import clock from "./assets/clock-svgrepo-com.svg";
 import Input from "./components/Input";
@@ -21,20 +21,6 @@ const strings = {
     "This is some placeholder text. You will be prompted about what to do next. Type what you'd like to do in the input line.",
 };
 
-const placeholderPage: Page = {
-  id: 0,
-  title: "Landing Page",
-  content: [
-    {
-      color: "green",
-      centered: false,
-      bold: false,
-      italicized: false,
-      content: strings.placeholder,
-    },
-  ],
-};
-
 function App() {
   const [name, setName] = useState("");
   const [input, setInput] = useState("");
@@ -45,6 +31,10 @@ function App() {
   const [history, setHistory] = useState<Page[]>([]);
   const [state, setState] = useState<State>("welcome");
   const [chat, setChat] = useState<Chat>({ messages: [] });
+  const [health, setHealth] = useState(10);
+  const [items, setItems] = useState<Item[]>([]);
+  const [currentGoal, setCurrentGoal] = useState<string>("");
+  const [currentLocation, setCurrentLocation] = useState<string>("");
 
   function handleSubmit(
     e:

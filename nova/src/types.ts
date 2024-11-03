@@ -12,7 +12,13 @@ export type Page = {
   content: Text[];
 };
 
-export type Chat = { // for python backend
+export type Chat = {
+  // for python backend
   // messages field equivalent to python list[dict]
-  messages: any[]
-}
+  messages: any[];
+};
+
+export type Item = {
+  name: string;
+  quantity: number;
+};
