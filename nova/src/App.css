@@ -18,6 +18,18 @@
   overflow-wrap: break-word;
 }
 
+*::-webkit-scrollbar {
+  width: 0.25rem;
+}
+ 
+*::-webkit-scrollbar-thumb {
+  background-color: #3f3;
+}
+
+*::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
 .normalText {
   font-family: "VT323";
   font-size: 2rem;
@@ -81,12 +93,12 @@
   position: absolute;
   bottom: 10%;
   right: 5%;
-  width: 15%;
-  height: 50%;
+  width: 25%;
+  height: 60%;
   background-color: #242424;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: top; */
   align-items: center;
   z-index: 101;
   border: #3f3 2px solid;
@@ -113,6 +125,27 @@
 
 .closeInventoryButton:hover {
   border-color: transparent;
+}
+
+.inventoryList {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 90%;
+  margin: 0;
+  padding: 0;
+}
+
+.inventoryItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
+.inventoryItem > p {
+  margin: 0;
 }
 
 .title {
@@ -246,19 +279,16 @@
   scrollbar-width: none; */
 }
 
-.subContainer::-webkit-scrollbar {
-  width: 0.25rem;
-}
- 
-.subContainer::-webkit-scrollbar-thumb {
-  background-color: #3f3;
-}
-
 .outputContainer {
   text-align: left;
   line-height: 100%;
   margin: 0;
   white-space: pre-wrap;
+}
+
+.secondaryText {
+  color: #ddd;
+  text-shadow: 0 0 4px #eee;
 }
 
 .healthBar {
@@ -273,6 +303,40 @@
   width: 2rem;
   user-select: none;
   filter: drop-shadow(0px 0px 6px #a00);
+}
+
+.shake {
+  animation: shake 0.5s infinite alternate;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+  50% {
+    transform: translate(-1px, 1px) rotate(1deg);
+  }
+  75% {
+    transform: translate(1px, 1px) rotate(-1deg);
+  }
+  100% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+}
+
+.shake:nth-child(odd) {
+  animation-duration: 0.225s;
+}
+
+.shake:nth-child(even) {
+  animation-duration: 0.275s;
+}
+
+.shake:nth-child(3n) {
+  animation-duration: 0.24s;
 }
 
 .inventoryButton {
@@ -294,4 +358,8 @@
 
 .inventoryButton:hover {
   border-color: transparent;
+}
+
+.unselectable {
+  user-select: none;
 }

@@ -4,13 +4,10 @@ text based rpg
 
 todo:
 
-- health bar wobble
-- get rid of scroll bar
+- start game -> game start
 - difficulty
-- loading screen \*
 - battle type
 - timer on questions
-- inventory
 - special encounters
 - images
 - always focus input
