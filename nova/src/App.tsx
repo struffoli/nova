@@ -73,17 +73,6 @@ function App() {
     e.preventDefault();
   }
 
-  function handleWelcome(
-    e:
-      | React.FormEvent<HTMLFormElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>
-  ) {
-    e.preventDefault();
-    setName(input);
-    setInput("");
-    setState("game");
-  }
-
   function renderOutput(state: State): React.ReactNode {
     switch (state) {
       case "welcome":
@@ -98,7 +87,11 @@ function App() {
                   value={name}
                   setValue={setName}
                   isWelcome={true}
-                  handleSubmit={handleSubmit}
+                  handleSubmit={(e) => {
+                    if (!isLoading) {
+                      handleSubmit(e);
+                    }
+                  }}
                 />
               </label>
             </form>
@@ -143,7 +136,7 @@ function App() {
                     value={input}
                     setValue={setInput}
                     isWelcome={false}
-                    handleSubmit={handleSubmit}
+                    handleSubmit={(e) => handleSubmit(e)}
                   />
                 )}
               </form>
