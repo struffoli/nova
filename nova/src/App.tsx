@@ -44,6 +44,29 @@ function App() {
   const [history, setHistory] = useState<Page[]>([placeholderPage]);
   const [state, setState] = useState<State>("welcome");
 
+  function handleSubmit(
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) {
+    // new output
+    setIsLoading(true);
+    getPage(input)
+      .then((newPage) => {
+        setHistory([...history, newPage]);
+        setCurIndex(history.length);
+      })
+      .catch((err) => {
+        setIsError(true);
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setInput("");
+      });
+    e.preventDefault();
+  }
+
   function renderOutput(state: State): React.ReactNode {
     switch (state) {
       case "welcome":
@@ -76,7 +99,14 @@ function App() {
       case "game":
         return (
           <>
-            <h2 className="pageTitle">{history[curIndex].title}</h2>
+            <h2 className="pageTitle">
+              {history[curIndex].title +
+                " [" +
+                (curIndex + 1) +
+                "/" +
+                history.length +
+                "]"}{" "}
+            </h2>
             <button
               className="historyButton"
               onClick={() => setState("history")}
@@ -101,32 +131,24 @@ function App() {
               })}
               <form
                 onSubmit={(e) => {
-                  // new output
-                  setIsLoading(true);
-                  getPage(input)
-                    .then((newPage) => {
-                      setHistory([...history, newPage]);
-                      setCurIndex(history.length);
-                    })
-                    .catch((err) => {
-                      setIsError(true);
-                      setError(err.message);
-                    })
-                    .finally(() => {
-                      setIsLoading(false);
-                      setInput("");
-                    });
-                  e.preventDefault();
+                  handleSubmit(e);
                 }}
               >
                 {!isLoading && curIndex == history.length - 1 && (
                   <div className="inputContainer">
-                    <input
-                      type="text"
-                      className="input normalText"
+                    {/* todo: disable pasting in \n */}
+                    <textarea
+                      maxLength={128}
+                      className="input normalText inputWide"
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                    ></input>
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
+                    ></textarea>
                   </div>
                 )}
               </form>
@@ -150,7 +172,7 @@ function App() {
                     {strings.returnToPage}
                   </button>
                 </li>
-                {history.map((page: Page, index: number) => {
+                {history.slice(0, -1).map((page: Page, index: number) => {
                   return (
                     <li key={index + 1} className="historyItem">
                       <button

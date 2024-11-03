@@ -13,6 +13,12 @@
   outline-color: #3f3;
 }
 
+#root textarea {
+  resize: none;
+  overflow-wrap: break-word;
+  height: 4rem;
+}
+
 .normalText {
   font-family: "VT323";
   font-size: 2rem;
@@ -161,6 +167,10 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
+.inputWide {
+  width: 100%;
+}
+
 .input:focus {
   outline: none;
 }
@@ -168,7 +178,7 @@
 .inputContainer {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: top;
   width: 100%;
 }
 
@@ -176,6 +186,7 @@
 .inputContainer::before {
   content: ">";
   margin-right: 1rem;
+  line-height: 115%;
 }
 
 .nameInput::before {
