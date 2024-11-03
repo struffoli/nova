@@ -11,3 +11,8 @@ export type Page = {
   title: string;
   content: Text[];
 };
+
+export type Chat = { // for python backend
+  // messages field equivalent to python list[dict]
+  messages: any[]
+}
