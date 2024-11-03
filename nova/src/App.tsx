@@ -15,8 +15,10 @@ const strings = {
   watermark: "(c) kevinware 1999",
   hello: "Hello",
   welcome: "Welcome",
+  loading: "Loading...",
   history: "History",
   returnToPage: "Return to current page",
+  items: "[Items]",
   error:
     "We're sorry, an error has occurred. Please refresh the page.\nError message: ",
   placeholder:
@@ -145,6 +147,9 @@ function App() {
                 ></img>
               ))}
             </div>
+            <button className="inventoryButton normalText">
+              {strings.items}
+            </button>
           </>
         );
       case "history":
@@ -196,7 +201,13 @@ function App() {
       )}
       <p className="watermark">{strings.watermark}</p>
       {/* title */}
-      <div className="mainContainer normalText">{renderOutput(state)}</div>
+      <div className="mainContainer normalText">
+        {isLoading ? (
+          <p className="normalText">{strings.loading}</p>
+        ) : (
+          renderOutput(state)
+        )}
+      </div>
     </>
   );
 }

@@ -4,18 +4,18 @@ text based rpg
 
 todo:
 
+- health bar wobble
+- get rid of scroll bar
+- difficulty
+- loading screen \*
 - battle type
 - timer on questions
 - inventory
 - special encounters
-- hp indicator
-- separate menu for history
 - images
 - always focus input
 - more character customization
-- current page
 - et cetera
-- disable input/submitting while loading on welcome
 
 # major todos
 

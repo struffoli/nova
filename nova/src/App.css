@@ -225,3 +225,24 @@
   user-select: none;
   filter: drop-shadow(0px 0px 6px #a00);
 }
+
+.inventoryButton {
+  position: absolute;
+  bottom: 0;
+  right: 16px;
+  transform: translateY(55%);
+  height: 1.5rem;
+  width: fit-content;
+  background-color: #242424;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  user-select: none;
+  font-size: 1.5rem;
+}
+
+.inventoryButton:hover {
+  border-color: transparent;
+}
