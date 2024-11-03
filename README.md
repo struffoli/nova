@@ -4,6 +4,7 @@ text based rpg
 
 todo:
 
+- battle type
 - timer on questions
 - inventory
 - special encounters
