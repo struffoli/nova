@@ -45,6 +45,16 @@ app.add_event_handler('shutdown', log_token_usage)
 class Chat(BaseModel):
     messages: list[dict]
 
+# TODO:
+# come up with design using structured output to get consistent formatted outputs and parse things like health, items etc
+# and be able to know when we are in a battle mode etc
+# likely will have multiple different assistants to handle things when it gets more complex
+# e.g. one should pre-process an input with a summarized context or just the game state and prevents impossible moves, like using items we dont have or doing something impossible or innapropriate
+# generally a response should have multiple parts:
+# - text chunks (can be different types)
+# - game state changes (health, items, location etc)
+# - mode
+
 # api endpoint for first message in the game
 # parameters: player name from landing page and possibly other settings
 # returns: messages list as json (response from openai)
