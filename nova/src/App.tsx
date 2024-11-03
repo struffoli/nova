@@ -5,6 +5,8 @@ import { Chat, Page, Text, Item } from "./types";
 // icon by halfmage https://www.svgrepo.com/svg/377250/clock
 import clock from "./assets/clock-svgrepo-com.svg";
 import Input from "./components/Input";
+import fullHeart from "./assets/filledHeart.svg";
+import emptyHeart from "./assets/clearHeart.svg";
 
 type State = "welcome" | "game" | "history" | "quiz";
 
@@ -130,6 +132,18 @@ function App() {
                   />
                 )}
               </form>
+            </div>
+            <div className="healthBar">
+              {[...Array(health)].map((_, index) => (
+                <img className="heart" key={index} src={fullHeart}></img>
+              ))}
+              {[...Array(10 - health)].map((_, index) => (
+                <img
+                  className="heart"
+                  key={health + index}
+                  src={emptyHeart}
+                ></img>
+              ))}
             </div>
           </>
         );

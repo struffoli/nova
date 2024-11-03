@@ -32,6 +32,7 @@
   color: #888888;
   bottom: 0;
   left: 1rem;
+  user-select: none;
 }
 
 .errorMessage {
@@ -111,6 +112,7 @@
 .historyIcon {
   height: 1.5rem;
   width: 1.5rem;
+  filter: drop-shadow(0px 0px 6px #0a0);
 }
 
 .historyList {
@@ -208,4 +210,18 @@
   line-height: 100%;
   margin: 0;
   white-space: pre-wrap;
+}
+
+.healthBar {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(66%);
+  background-color: #242424;
+}
+
+.heart {
+  height: 2rem;
+  width: 2rem;
+  user-select: none;
+  filter: drop-shadow(0px 0px 6px #a00);
 }
