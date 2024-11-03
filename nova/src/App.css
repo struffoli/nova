@@ -81,12 +81,12 @@
   position: absolute;
   bottom: 10%;
   right: 5%;
-  width: 15%;
-  height: 50%;
+  width: 25%;
+  height: 60%;
   background-color: #242424;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: top; */
   align-items: center;
   z-index: 101;
   border: #3f3 2px solid;
@@ -113,6 +113,39 @@
 
 .closeInventoryButton:hover {
   border-color: transparent;
+}
+
+.inventoryList {
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 90%;
+  margin: 0;
+  padding: 0;
+}
+
+.inventoryList::-webkit-scrollbar {
+  width: 0.25rem;
+}
+ 
+.inventoryList::-webkit-scrollbar-thumb {
+  background-color: #3f3;
+}
+
+.inventoryList::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.inventoryItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
+.inventoryItem > p {
+  margin: 0;
 }
 
 .title {
@@ -294,4 +327,8 @@
 
 .inventoryButton:hover {
   border-color: transparent;
+}
+
+.unselectable {
+  user-select: none;
 }

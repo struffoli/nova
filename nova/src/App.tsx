@@ -217,13 +217,24 @@ function App() {
           >
             X
           </button>
+          <h2 className="normalText">{strings.items}</h2>
+          <ul className="inventoryList">
+            {items.map((item: Item, index: number) => {
+              return (
+                <li key={index} className="inventoryItem">
+                  <p className="normalText">{item.name}</p>
+                  <p className="normalText">{item.quantity}</p>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       )}
       <p className="watermark">{strings.watermark}</p>
       {/* title */}
       <div className="mainContainer normalText">
         {isLoading ? (
-          <p className="normalText">{strings.loading}</p>
+          <p className="normalText unselectable">{strings.loading}</p>
         ) : (
           renderOutput(state)
         )}
