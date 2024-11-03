@@ -15,14 +15,19 @@ const strings = {
   watermark: "(c) kevinware 1999",
   hello: "Hello",
   welcome: "Welcome",
-  loading: "Loading...",
+  loading1: "Loading",
+  loading2: "Loading...",
   history: "History",
   returnToPage: "Return to current page",
   items: "[Items]",
+  goal: "Current Goal: ",
+  location: "Current Location: ",
   error:
     "We're sorry, an error has occurred. Please refresh the page.\nError message: ",
   placeholder:
     "This is some placeholder text. You will be prompted about what to do next. Type what you'd like to do in the input line.",
+  placeholder2: "Defeat Kevin!",
+  placeholder3: "GDC",
 };
 
 const placeholderItems: Item[] = [
@@ -43,8 +48,10 @@ function App() {
   const [chat, setChat] = useState<Chat>({ messages: [] });
   const [health, setHealth] = useState(10);
   const [items, setItems] = useState<Item[]>(placeholderItems);
-  const [currentGoal, setCurrentGoal] = useState<string>("");
-  const [currentLocation, setCurrentLocation] = useState<string>("");
+  const [currentGoal, setCurrentGoal] = useState<string>(strings.placeholder2);
+  const [currentLocation, setCurrentLocation] = useState<string>(
+    strings.placeholder3
+  );
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
 
   function handleSubmit(
@@ -131,29 +138,43 @@ function App() {
                   </p>
                 );
               })}
-              <form>
-                {!isLoading && curIndex == history.length - 1 && (
-                  <Input
-                    value={input}
-                    setValue={setInput}
-                    isWelcome={false}
-                    handleSubmit={(e) => handleSubmit(e)}
-                  />
-                )}
-              </form>
+              {!isLoading && curIndex == history.length - 1 && (
+                <>
+                  <p className="outputContainer secondaryText">
+                    {strings.goal} {currentGoal}
+                  </p>
+                  <p className="outputContainer secondaryText">
+                    {strings.location} {currentLocation}
+                  </p>
+                  <form>
+                    <Input
+                      value={input}
+                      setValue={setInput}
+                      isWelcome={false}
+                      handleSubmit={(e) => handleSubmit(e)}
+                    />
+                  </form>
+                </>
+              )}
             </div>
-            <div className="healthBar">
-              {[...Array(health)].map((_, index) => (
-                <img className="heart" key={index} src={fullHeart}></img>
-              ))}
-              {[...Array(10 - health)].map((_, index) => (
-                <img
-                  className="heart"
-                  key={health + index}
-                  src={emptyHeart}
-                ></img>
-              ))}
-            </div>
+            {curIndex == history.length - 1 && (
+              <div className="healthBar">
+                {[...Array(health)].map((_, index) => (
+                  <img
+                    className={`heart ${health <= 3 ? "shake" : ""}`}
+                    key={index}
+                    src={fullHeart}
+                  ></img>
+                ))}
+                {[...Array(10 - health)].map((_, index) => (
+                  <img
+                    className={`heart ${health <= 3 ? "shake" : ""}`}
+                    key={health + index}
+                    src={emptyHeart}
+                  ></img>
+                ))}
+              </div>
+            )}
             {curIndex == history.length - 1 && (
               <button
                 onClick={() => setIsInventoryOpen(true)}
@@ -236,7 +257,10 @@ function App() {
       {/* title */}
       <div className="mainContainer normalText">
         {isLoading ? (
-          <p className="normalText unselectable">{strings.loading}</p>
+          <>
+            <h2 className="pageTitle">{strings.loading1}</h2>
+            <p className="normalText unselectable">{strings.loading2}</p>
+          </>
         ) : (
           renderOutput(state)
         )}

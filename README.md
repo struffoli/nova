@@ -5,7 +5,6 @@ text based rpg
 todo:
 
 - start game -> game start
-- health bar wobble
 - difficulty
 - battle type
 - timer on questions

@@ -286,6 +286,11 @@
   white-space: pre-wrap;
 }
 
+.secondaryText {
+  color: #ddd;
+  text-shadow: 0 0 4px #eee;
+}
+
 .healthBar {
   position: absolute;
   bottom: 0;
@@ -298,6 +303,40 @@
   width: 2rem;
   user-select: none;
   filter: drop-shadow(0px 0px 6px #a00);
+}
+
+.shake {
+  animation: shake 0.5s infinite alternate;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+  50% {
+    transform: translate(-1px, 1px) rotate(1deg);
+  }
+  75% {
+    transform: translate(1px, 1px) rotate(-1deg);
+  }
+  100% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+}
+
+.shake:nth-child(odd) {
+  animation-duration: 0.225s;
+}
+
+.shake:nth-child(even) {
+  animation-duration: 0.275s;
+}
+
+.shake:nth-child(3n) {
+  animation-duration: 0.24s;
 }
 
 .inventoryButton {
