@@ -25,6 +25,12 @@ const strings = {
     "This is some placeholder text. You will be prompted about what to do next. Type what you'd like to do in the input line.",
 };
 
+const placeholderItems: Item[] = [
+  { name: "Sword", quantity: 1 },
+  { name: "Shield", quantity: 1 },
+  { name: "Potion", quantity: 3 },
+];
+
 function App() {
   const [name, setName] = useState("");
   const [input, setInput] = useState("");
@@ -36,9 +42,10 @@ function App() {
   const [state, setState] = useState<State>("welcome");
   const [chat, setChat] = useState<Chat>({ messages: [] });
   const [health, setHealth] = useState(10);
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<Item[]>(placeholderItems);
   const [currentGoal, setCurrentGoal] = useState<string>("");
   const [currentLocation, setCurrentLocation] = useState<string>("");
+  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
 
   function handleSubmit(
     e:
@@ -147,7 +154,10 @@ function App() {
                 ></img>
               ))}
             </div>
-            <button className="inventoryButton normalText">
+            <button
+              onClick={() => setIsInventoryOpen(true)}
+              className="inventoryButton normalText"
+            >
               {strings.items}
             </button>
           </>
@@ -197,6 +207,16 @@ function App() {
       {isError && (
         <div className="errorMessage">
           {strings.error} {error}
+        </div>
+      )}
+      {isInventoryOpen && (
+        <div className="inventoryModal">
+          <button
+            onClick={() => setIsInventoryOpen(false)}
+            className="closeInventoryButton normalText"
+          >
+            X
+          </button>
         </div>
       )}
       <p className="watermark">{strings.watermark}</p>
