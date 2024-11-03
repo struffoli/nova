@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { getPage } from "./gameFunctions";
-import { Page, Text } from "./types";
+import { Chat, Page, Text } from "./types";
 // icon by halfmage https://www.svgrepo.com/svg/377250/clock
 import clock from "./assets/clock-svgrepo-com.svg";
 import Input from "./components/Input";
@@ -42,8 +42,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
-  const [history, setHistory] = useState<Page[]>([placeholderPage]);
+  const [history, setHistory] = useState<Page[]>([]);
   const [state, setState] = useState<State>("welcome");
+  const [chat, setChat] = useState<Chat>({ messages: [] });
 
   function handleSubmit(
     e:
@@ -52,10 +53,14 @@ function App() {
   ) {
     // new output
     setIsLoading(true);
-    getPage(input)
-      .then((newPage) => {
-        setHistory([...history, newPage]);
+    getPage(history.length + 1, chat, input)
+      .then((response) => {
+        setHistory([...history, response[0]]);
+        setChat(response[1]);
         setCurIndex(history.length);
+        if (state === "welcome") {
+          setState("game");
+        }
       })
       .catch((err) => {
         setIsError(true);
@@ -88,9 +93,7 @@ function App() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setName(input);
-                setInput("");
-                setState("game");
+                handleSubmit(e);
               }}
             >
               <label className="title flex-col">
