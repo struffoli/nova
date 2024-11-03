@@ -4,6 +4,7 @@ import { getPage } from "./gameFunctions";
 import { Page, Text } from "./types";
 // icon by halfmage https://www.svgrepo.com/svg/377250/clock
 import clock from "./assets/clock-svgrepo-com.svg";
+import Input from "./components/Input";
 
 type State = "welcome" | "game" | "history" | "quiz";
 
@@ -67,6 +68,17 @@ function App() {
     e.preventDefault();
   }
 
+  function handleWelcome(
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) {
+    e.preventDefault();
+    setName(input);
+    setInput("");
+    setState("game");
+  }
+
   function renderOutput(state: State): React.ReactNode {
     switch (state) {
       case "welcome":
@@ -83,15 +95,12 @@ function App() {
             >
               <label className="title flex-col">
                 {strings.whatIsYourName}
-                <div className="inputContainer normalText nameInput">
-                  <input
-                    type="text"
-                    maxLength={20}
-                    className="input normalText"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                  ></input>
-                </div>
+                <Input
+                  value={name}
+                  setValue={setName}
+                  isWelcome={true}
+                  handleSubmit={handleWelcome}
+                />
               </label>
             </form>
           </>
@@ -135,21 +144,12 @@ function App() {
                 }}
               >
                 {!isLoading && curIndex == history.length - 1 && (
-                  <div className="inputContainer">
-                    {/* todo: disable pasting in \n */}
-                    <textarea
-                      maxLength={128}
-                      className="input normalText inputWide"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleSubmit(e);
-                        }
-                      }}
-                    ></textarea>
-                  </div>
+                  <Input
+                    value={input}
+                    setValue={setInput}
+                    isWelcome={false}
+                    handleSubmit={handleSubmit}
+                  />
                 )}
               </form>
             </div>

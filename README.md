@@ -14,6 +14,7 @@ todo:
 - more character customization
 - current page
 - et cetera
+- disable input/submitting while loading on welcome
 
 # major todos
 

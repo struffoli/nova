@@ -16,7 +16,6 @@
 #root textarea {
   resize: none;
   overflow-wrap: break-word;
-  height: 4rem;
 }
 
 .normalText {
@@ -165,6 +164,12 @@
   height: 2rem;
   border: none;
   background-color: rgba(0, 0, 0, 0);
+  position: relative;
+  /* display: flex; */
+}
+
+.tallTextarea {
+  height: 4rem;
 }
 
 .inputWide {
@@ -192,6 +197,20 @@
 .nameInput::before {
   content: "[guest@nova] $ setname";
   margin-right: 0.7rem;
+}
+
+.cursor {
+  position: absolute; /* Position cursor absolutely */
+  width: 10px; /* Cursor width */
+  height: 1em; /* Cursor height */
+  background-color: #0f0; /* Cursor color */
+  transform: translate(0, 0); /* Default position */
+  transition: background-color 0.1s ease; /* Smooth transition */
+  display: none; /* Hidden by default */
+}
+
+.cursor.active {
+  background-color: rgba(0, 255, 0, 0.5); /* Hollow effect when active */
 }
 
 .subContainer {
